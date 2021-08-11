@@ -116,16 +116,6 @@ const GridImageView = ({
           </TouchableOpacity>
         </View>
 
-        <View style={{...styles.confirm, top: height + 5}}>
-          <TouchableOpacity
-            onPress={() => {
-              onImageSelected(data[modal.data]);
-              setModal({visible: false, data: 0});
-            }}>
-            <Check />
-          </TouchableOpacity>
-        </View>
-
         <View style={styles.move_right_view}>
           <TouchableOpacity
             onPress={() => {
@@ -141,6 +131,16 @@ const GridImageView = ({
               }
             }}>
             <MoveRight />
+          </TouchableOpacity>
+        </View>
+
+        <View style={{...styles.confirm, top: height + 5}}>
+          <TouchableOpacity
+            onPress={() => {
+              onImageSelected(data[modal.data]);
+              setModal({visible: false, data: 0});
+            }}>
+            <Check />
           </TouchableOpacity>
         </View>
       </Modal>
