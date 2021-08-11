@@ -11,6 +11,7 @@ import {
   Platform,
   NativeModules,
 } from 'react-native';
+import Check from './Check';
 import Cross from './Cross';
 import MoveLeft from './MoveLeft';
 import MoveRight from './MoveRight';
@@ -22,6 +23,7 @@ const GridImageView = ({
   renderModalImage = null,
   transparent = 0.8,
   heightOfGridImage = Dimensions.get('window').height / 5.5,
+  onImageSelected,
 }) => {
   const [modal, setModal] = useState({visible: false, data: 0});
   const ref = useRef();
@@ -111,6 +113,16 @@ const GridImageView = ({
               setModal({visible: false, data: 0});
             }}>
             <Cross />
+          </TouchableOpacity>
+        </View>
+
+        <View style={{...styles.confirm, top: height + 5}}>
+          <TouchableOpacity
+            onPress={() => {
+              onImageSelected(data[modal.data]);
+              setModal({visible: false, data: 0});
+            }}>
+            <Check />
           </TouchableOpacity>
         </View>
 
@@ -282,6 +294,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     left: 0,
+  },
+  confirm: {
+    position: 'absolute',
+    alignSelf: 'center',
+    alignItems: 'center',
+    justifyContent: 'center',
+    right: 0,
   },
   move_left_view: {
     position: 'absolute',
