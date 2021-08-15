@@ -10,7 +10,9 @@ import {
   ScrollView,
   Platform,
   NativeModules,
+  Text,
 } from 'react-native';
+import {BottomSheetFlatList} from '@gorhom/bottom-sheet';
 import Check from './Check';
 import Cross from './Cross';
 import MoveLeft from './MoveLeft';
@@ -24,6 +26,8 @@ const GridImageView = ({
   transparent = 0.8,
   heightOfGridImage = Dimensions.get('window').height / 5.5,
   onImageSelected,
+  onBottomReached,
+  flatListComponent,
 }) => {
   const [modal, setModal] = useState({visible: false, data: 0});
   const ref = useRef();
@@ -40,6 +44,109 @@ const GridImageView = ({
       });
     }
   }, []);
+
+  const renderImages = (index) => {
+    if (data.length <= index * 3) {
+      return null;
+    }
+    return (
+      <View style={styles.unit}>
+        <View style={[styles.unit_item, {height: heightOfGridImage}]}>
+          {data.length > index * 3 ? (
+            <TouchableOpacity
+              onPress={() => {
+                setModal({visible: true, data: index * 3});
+
+                setTimeout(() => {
+                  ref.current.scrollTo({
+                    x: Dimensions.get('window').width * index * 3,
+                    y: 0,
+                    animated: false,
+                  });
+                }, 1);
+              }}
+              style={[styles.unit_item, {height: heightOfGridImage}]}>
+              {renderGridImage !== null ? (
+                renderGridImage(data[index * 3], styles.img)
+              ) : (
+                <Image
+                  style={styles.img}
+                  source={{
+                    uri: data[index * 3],
+                    ...(headers == null || headers == undefined || headers == {}
+                      ? {}
+                      : {method: 'POST', headers}),
+                  }}
+                />
+              )}
+            </TouchableOpacity>
+          ) : null}
+        </View>
+        <View style={[styles.unit_item, {height: heightOfGridImage}]}>
+          {data.length > index * 3 + 1 ? (
+            <TouchableOpacity
+              onPress={() => {
+                setModal({visible: true, data: index * 3 + 1});
+
+                setTimeout(() => {
+                  ref.current.scrollTo({
+                    x: Dimensions.get('window').width * (index * 3 + 1),
+                    y: 0,
+                    animated: false,
+                  });
+                }, 1);
+              }}
+              style={[styles.unit_item, {height: heightOfGridImage}]}>
+              {renderGridImage !== null ? (
+                renderGridImage(data[index * 3 + 1], styles.img)
+              ) : (
+                <Image
+                  style={styles.img}
+                  source={{
+                    uri: data[index * 3 + 1],
+                    ...(headers == null || headers == undefined || headers == {}
+                      ? {}
+                      : {method: 'POST', headers}),
+                  }}
+                />
+              )}
+            </TouchableOpacity>
+          ) : null}
+        </View>
+        <View style={[styles.unit_item, {height: heightOfGridImage}]}>
+          {data.length > index * 3 + 2 ? (
+            <TouchableOpacity
+              onPress={() => {
+                setModal({visible: true, data: index * 3 + 2});
+
+                setTimeout(() => {
+                  ref.current.scrollTo({
+                    x: Dimensions.get('window').width * (index * 3 + 2),
+                    y: 0,
+                    animated: false,
+                  });
+                }, 1);
+              }}
+              style={[styles.unit_item, {height: heightOfGridImage}]}>
+              {renderGridImage !== null ? (
+                renderGridImage(data[index * 3 + 2], styles.img)
+              ) : (
+                <Image
+                  style={styles.img}
+                  source={{
+                    uri: data[index * 3 + 2],
+                    ...(headers == null || headers == undefined || headers == {}
+                      ? {}
+                      : {method: 'POST', headers}),
+                  }}
+                />
+              )}
+            </TouchableOpacity>
+          ) : null}
+        </View>
+      </View>
+    );
+  };
 
   const Component = ({style = {flex: 1}}) => {
     return (
@@ -77,8 +184,12 @@ const GridImageView = ({
     );
   };
 
+  const creatFlatListComponent = () => {
+    React.createElement;
+  };
+
   return (
-    <View style={styles.background}>
+    <>
       <Modal
         // propagateSwipe={true}
         animationType="slide"
@@ -144,130 +255,44 @@ const GridImageView = ({
           </TouchableOpacity>
         </View>
       </Modal>
-
-      <FlatList
-        contentContainerStyle={{paddingBottom: 40}}
-        data={data}
-        renderItem={({index}) => {
-          if (data.length <= index * 3) {
-            return null;
-          }
-          return (
-            <View style={styles.unit}>
-              <View style={[styles.unit_item, {height: heightOfGridImage}]}>
-                {data.length > index * 3 ? (
-                  <TouchableOpacity
-                    onPress={() => {
-                      setModal({visible: true, data: index * 3});
-
-                      setTimeout(() => {
-                        ref.current.scrollTo({
-                          x: Dimensions.get('window').width * index * 3,
-                          y: 0,
-                          animated: false,
-                        });
-                      }, 1);
-                    }}
-                    style={[styles.unit_item, {height: heightOfGridImage}]}>
-                    {renderGridImage !== null ? (
-                      renderGridImage(data[index * 3], styles.img)
-                    ) : (
-                      <Image
-                        style={styles.img}
-                        source={{
-                          uri: data[index * 3],
-                          ...(headers == null ||
-                          headers == undefined ||
-                          headers == {}
-                            ? {}
-                            : {method: 'POST', headers}),
-                        }}
-                      />
-                    )}
-                  </TouchableOpacity>
-                ) : null}
-              </View>
-              <View style={[styles.unit_item, {height: heightOfGridImage}]}>
-                {data.length > index * 3 + 1 ? (
-                  <TouchableOpacity
-                    onPress={() => {
-                      setModal({visible: true, data: index * 3 + 1});
-
-                      setTimeout(() => {
-                        ref.current.scrollTo({
-                          x: Dimensions.get('window').width * (index * 3 + 1),
-                          y: 0,
-                          animated: false,
-                        });
-                      }, 1);
-                    }}
-                    style={[styles.unit_item, {height: heightOfGridImage}]}>
-                    {renderGridImage !== null ? (
-                      renderGridImage(data[index * 3 + 1], styles.img)
-                    ) : (
-                      <Image
-                        style={styles.img}
-                        source={{
-                          uri: data[index * 3 + 1],
-                          ...(headers == null ||
-                          headers == undefined ||
-                          headers == {}
-                            ? {}
-                            : {method: 'POST', headers}),
-                        }}
-                      />
-                    )}
-                  </TouchableOpacity>
-                ) : null}
-              </View>
-              <View style={[styles.unit_item, {height: heightOfGridImage}]}>
-                {data.length > index * 3 + 2 ? (
-                  <TouchableOpacity
-                    onPress={() => {
-                      setModal({visible: true, data: index * 3 + 2});
-
-                      setTimeout(() => {
-                        ref.current.scrollTo({
-                          x: Dimensions.get('window').width * (index * 3 + 2),
-                          y: 0,
-                          animated: false,
-                        });
-                      }, 1);
-                    }}
-                    style={[styles.unit_item, {height: heightOfGridImage}]}>
-                    {renderGridImage !== null ? (
-                      renderGridImage(data[index * 3 + 2], styles.img)
-                    ) : (
-                      <Image
-                        style={styles.img}
-                        source={{
-                          uri: data[index * 3 + 2],
-                          ...(headers == null ||
-                          headers == undefined ||
-                          headers == {}
-                            ? {}
-                            : {method: 'POST', headers}),
-                        }}
-                      />
-                    )}
-                  </TouchableOpacity>
-                ) : null}
-              </View>
-            </View>
-          );
-        }}
-        keyExtractor={(item) => {
-          key++;
-          return key.toString();
-        }}
-        style={styles.flatlist}
-      />
-    </View>
+      {flatListComponent ? (
+        React.createElement(
+          flatListComponent,
+          {
+            onEndReached: onBottomReached,
+            onEndReachedThreshold: 0,
+            contentContainerStyle: {paddingBottom: 40},
+            data: data,
+            renderItem: ({index}) => renderImages(index),
+            keyExtractor: (item) => {
+              key++;
+              return key.toString();
+            },
+            style: styles.flatlist,
+          },
+          null,
+        )
+      ) : (
+        <FlatList
+          onEndReached={onBottomReached}
+          onEndReachedThreshold={0}
+          contentContainerStyle={{paddingBottom: 40}}
+          data={data}
+          renderItem={({index}) => renderImages(index)}
+          keyExtractor={(item) => {
+            key++;
+            return key.toString();
+          }}
+          style={styles.flatlist}
+        />
+      )}
+    </>
   );
 };
 
 const styles = StyleSheet.create({
   background: {
+    backgroundColor: 'green',
     flex: 1,
   },
   flatlist: {
