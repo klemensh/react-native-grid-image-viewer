@@ -26,8 +26,8 @@ const GridImageView = ({
   transparent = 0.8,
   heightOfGridImage = Dimensions.get('window').height / 5.5,
   onImageSelected,
-  onBottomReached,
-  flatListComponent,
+  onEndReached,
+  flatListComponent = FlatList,
 }) => {
   const [modal, setModal] = useState({visible: false, data: 0});
   const ref = useRef();
@@ -255,36 +255,21 @@ const GridImageView = ({
           </TouchableOpacity>
         </View>
       </Modal>
-      {flatListComponent ? (
-        React.createElement(
-          flatListComponent,
-          {
-            onEndReached: onBottomReached,
-            onEndReachedThreshold: 0,
-            contentContainerStyle: {paddingBottom: 40},
-            data: data,
-            renderItem: ({index}) => renderImages(index),
-            keyExtractor: (item) => {
-              key++;
-              return key.toString();
-            },
-            style: styles.flatlist,
-          },
-          null,
-        )
-      ) : (
-        <FlatList
-          onEndReached={onBottomReached}
-          onEndReachedThreshold={0}
-          contentContainerStyle={{paddingBottom: 40}}
-          data={data}
-          renderItem={({index}) => renderImages(index)}
-          keyExtractor={(item) => {
+      {React.createElement(
+        flatListComponent,
+        {
+          onEndReached: onEndReached,
+          onEndReachedThreshold: 0,
+          contentContainerStyle: {paddingBottom: 40},
+          data: data,
+          renderItem: ({index}) => renderImages(index),
+          keyExtractor: () => {
             key++;
             return key.toString();
-          }}
-          style={styles.flatlist}
-        />
+          },
+          style: styles.flatlist,
+        },
+        null,
       )}
     </>
   );
